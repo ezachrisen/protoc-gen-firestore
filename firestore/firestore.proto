@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package firestore;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "alticeusa.com/maui/protoc-gen-firestore/firestore;firestore";
+
+extend google.protobuf.MessageOptions {
+  optional bool generate_firestore = 50001;
+}

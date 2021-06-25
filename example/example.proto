@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package example;
+
+import "firestore/firestore.proto";
+
+option go_package = "alticeusa.com/maui/protoc-gen-firestore/example";
+
+message Example {
+  option (firestore.generate_firestore) = true;
+  string name = 1;
+  string something = 2;
+  int32 another = 3;
+}
+
+message ExampleRequest {
+  string name = 1;
+  double amount = 3;
+}
+  
+
+service ExampleService {
+  rpc CreateExample(Example) returns (Example) {}
+  rpc GetExample(ExampleRequest) returns (Example) {}
+}
