@@ -6,7 +6,7 @@ example: proto install gen-tag
 	protoc -I /usr/local/include \
 	-I ${LOCAL_PATH} \
 	-I ./example \
-	--firestore_out=module="alticeusa.com/maui/protoc-gen-firestore/example"m:./output example/example.proto
+	--firestore_out=module="alticeusa.com/maui/protoc-gen-firestore/example":./output example/example.proto
 
 proto:
 	protoc -I /usr/local/include \

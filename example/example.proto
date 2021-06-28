@@ -5,6 +5,38 @@ package example;
 import "firestore/firestore.proto";
 
 option go_package = "alticeusa.com/maui/protoc-gen-firestore/example";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+
+
+service ExampleService {
+  option (firestore.generate_service) = true;
+  rpc CreateExample(Example) returns (Example) {}
+  rpc GetExample(ExampleRequest) returns (Example) {}
+  rpc DeleteExample(ExampleDeleteRequest) returns (google.protobuf.Empty) {}
+  rpc ListExamples(ExampleListRequest) returns (ExampleList) {}
+  rpc UpdateExample(ExampleUpdateRequest) returns (Example) {}
+  rpc SomeOtherMethod(Example) returns (Example) {}
+}
+
+
+message ExampleDeleteRequest {
+  string name = 1;
+}
+
+message ExampleListRequest {
+}
+
+message ExampleList {
+  repeated Example exampes = 1;
+}
+
+message ExampleUpdateRequest {
+	Example example = 1;
+	google.protobuf.FieldMask updateMask = 2;
+}f
+
 
 message Example {
   option (firestore.generate_firestore) = true;
@@ -16,10 +48,4 @@ message Example {
 message ExampleRequest {
   string name = 1;
   double amount = 3;
-}
-  
-
-service ExampleService {
-  rpc CreateExample(Example) returns (Example) {}
-  rpc GetExample(ExampleRequest) returns (Example) {}
 }

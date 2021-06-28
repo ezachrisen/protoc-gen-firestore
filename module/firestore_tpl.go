@@ -17,6 +17,7 @@ import (
   "alticeusa.com/maui/metadata"
 )
 
+
 {{ range .Messages }}
   {{if shouldGenerateFirestore . }}
 

@@ -5,6 +5,7 @@
 package example
 
 import (
+	"alticeusa.com/maui/metadata"
 	"cloud.google.com/go/firestore"
 	"context"
 	"fmt"
@@ -39,7 +40,7 @@ func CreateExample(ctx context.Context, client *firestore.Client, collection str
 		return fmt.Errorf("CreateExample: firestore client is nil")
 	}
 
-	doc.UpdatedBy = maui.GetUsernameFromMetadata(ctx)
+	doc.UpdatedBy = metadata.GetUsernameFromMetadata(ctx)
 	doc.Created = ptypes.TimestampNow()
 
 	_, err := client.Collection(collection).Doc(doc.Name).Set(ctx, doc)
@@ -80,10 +81,10 @@ func UpdateExample(ctx context.Context, client *firestore.Client, collection str
 	// Only allow some accounts the ability to override the system-generated fields,
 	/// such as for batch loading / transfers, etc. For now, block any outside updates.
 
-	for _, p := range req.UpdateMask.paths {
+	for _, p := range req.UpdateMask.Paths {
 		for _, x := range []string{"updated_by", "updated", "name"} {
 			if p == x {
-				return fmt.Errorf("UpdateExample updating '%s': Updates to '%s' not permitted", req.Name, x)
+				return fmt.Errorf("UpdateExample updating '%s': Updates to '%s' not permitted", req.Example.Name, x)
 			}
 		}
 	}
@@ -96,7 +97,7 @@ func UpdateExample(ctx context.Context, client *firestore.Client, collection str
 		fps = append(fps, []string{p})
 	}
 
-	req.Rule.UpdatedBy = maui.GetUsernameFromMetadata(ctx)
+	req.Rule.UpdatedBy = metadata.GetUsernameFromMetadata(ctx)
 	req.Rule.Updated = ptypes.TimestampNow()
 
 	_, err := client.Collection(collection).Doc(req.Example.Name).Set(ctx, req.Example, firestore.Merge(fps...))
@@ -107,10 +108,10 @@ func UpdateExample(ctx context.Context, client *firestore.Client, collection str
 	return nil
 }
 
-func ListExamples(ctx context.Context, client *firestore.Client, collection string, req *ExampleUpdateRequest) (*ExampleList, error) {
+func ListExamples(ctx context.Context, client *firestore.Client, collection string, req *ExampleListRequest) (*ExampleList, error) {
 
 	if client == nil {
-		return fmt.Errorf("firestore client is nil")
+		return nil, fmt.Errorf("firestore client is nil")
 	}
 
 	limit := 50
